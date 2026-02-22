@@ -1,12 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTrackView } from "@/hooks/useTrackView";
 
 export function Skills() {
   const { content } = useLanguage();
   const { skills } = content;
+  const sectionRef = useTrackView('Skills');
 
   return (
-    <section className="py-24 bg-slate-50">
+    <section ref={sectionRef} className="py-24 bg-slate-50">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">

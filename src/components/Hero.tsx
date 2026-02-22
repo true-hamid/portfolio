@@ -3,16 +3,20 @@ import { Button } from "@/components/ui/button";
 import profileImage from "@/assets/adebfc95059e2b057aa132fac2567ff40ecb644e.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import resumePDF from "@/assets/HamidAbdalrahman.pdf";
+import { trackEvent } from "@/utils/analytics";
+import { useTrackView } from "@/hooks/useTrackView";
 
 export function Hero() {
   const { content } = useLanguage();
   const { hero, personal } = content;
+  const sectionRef = useTrackView('Hero');
 
   const scrollToProjects = () => {
     document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDownloadCV = () => {
+    trackEvent({ action: 'cv_download', category: 'engagement', label: 'Resume Download' });
     const link = document.createElement('a');
     link.href = resumePDF;
     link.download = 'Hamid_Abdalrahman_Resume.pdf';
@@ -22,16 +26,16 @@ export function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section ref={sectionRef} className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <div className="mb-8 flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-2xl opacity-30"></div>
-              <img 
-                src={profileImage} 
-                alt="Profile" 
+              <img
+                src={profileImage}
+                alt="Profile"
                 className="relative w-40 h-40 rounded-full object-cover border-4 border-white/10 shadow-2xl"
               />
             </div>

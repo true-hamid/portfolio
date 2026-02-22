@@ -1,9 +1,11 @@
 import { Code2, Users, Rocket, GitPullRequestArrow } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTrackView } from "@/hooks/useTrackView";
 
 export function About() {
   const { content } = useLanguage();
   const { about } = content;
+  const sectionRef = useTrackView('About');
 
   const icons = [Code2, Rocket, GitPullRequestArrow, Users];
   const highlights = about.highlights.map((highlight, index) => ({
@@ -12,7 +14,7 @@ export function About() {
   }));
 
   return (
-    <section id="about" className="py-24 bg-white">
+    <section ref={sectionRef} id="about" className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">

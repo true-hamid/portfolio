@@ -1,12 +1,14 @@
 import { Briefcase, Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTrackView } from "@/hooks/useTrackView";
 
 export function Experience() {
   const { content } = useLanguage();
   const { experience } = content;
+  const sectionRef = useTrackView('Experience');
 
   return (
-    <section id="experience" className="py-24 bg-slate-50">
+    <section ref={sectionRef} id="experience" className="py-24 bg-slate-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">

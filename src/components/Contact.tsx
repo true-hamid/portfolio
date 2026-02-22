@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { trackEvent } from "@/utils/analytics";
+import { useTrackView } from "@/hooks/useTrackView";
 
 // Form validation schema
 const contactFormSchema = z.object({
@@ -19,6 +21,7 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 export function Contact() {
   const { content } = useLanguage();
   const { contact, personal } = content;
+  const sectionRef = useTrackView('Contact');
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
     email: "",
@@ -91,6 +94,7 @@ export function Contact() {
 
       setSubmitStatus("success");
       setFormData({ name: "", email: "", message: "" });
+      trackEvent({ action: 'contact_form_submit', category: 'engagement', label: 'Contact Form' });
     } catch (error) {
       console.error("Email sending failed:", error);
       setSubmitStatus("error");
@@ -120,7 +124,7 @@ export function Contact() {
   const socialLinks = socialTargets.map((s, i) => ({ icon: socialIcons[i] ?? Linkedin, href: s.href, label: s.label }));
 
   return (
-    <section className="py-24 bg-white">
+    <section ref={sectionRef} className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
