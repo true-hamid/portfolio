@@ -39,7 +39,7 @@ export const contentEN = {
     heading: "Hamid Abdalrahman",
     subheading: "Building Enterprise Banking Solutions",
     description:
-      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale global digital banking solutions. Specialized in mobile engineering, secure digital channels, and multi-region product delivery.`,
+      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale global digital banking solutions. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the SDLC to accelerate delivery and elevate code quality.`,
     cta: {
       primary: "Who I Am",
       secondary: "Download CV",
@@ -49,7 +49,7 @@ export const contentEN = {
   about: {
     title: "About Me",
     subtitle:
-      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale digital banking solutions across the UAE, Egypt, and Pakistan. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Trusted technical leader with a strong record of improving app performance, driving security maturity, and accelerating engineering productivity.`,
+      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale digital banking solutions across the UAE, Egypt, and Pakistan. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Trusted technical leader with a strong record of improving app performance, driving security maturity, and accelerating engineering productivity. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the software development lifecycle (SDLC) to accelerate delivery and elevate code quality.`,
     highlights: [
       {
         title: `${yearsOfExperience} Years`,
@@ -64,7 +64,7 @@ export const contentEN = {
         description: "Empowering engineering teams to excel",
       },
       {
-        title: "2M+ Users",
+        title: "1M+ Users",
         description: "Using products I helped deliver",
       },
     ],
@@ -73,8 +73,8 @@ export const contentEN = {
       paragraphs: [
         "After graduating with a B.S. in Computer Engineering in 2017, I started my career as a software developer at TPRA in Sudan, where I delivered solutions aligned with IT and regulatory requirements. I joined Mashreq Bank in Dubai in 2019, where I've progressed from Dev Engineer to Global Lead Engineer.",
         "I joined SemiCode as Head of Mobile Development, where I established and led the mobile engineering function in a fast-paced startup environment.",
-        "Throughout my journey at Mashreq, I've led the development of digital banking solutions serving over 2M+ users, enhanced mobile security posture by reducing vulnerabilities by 90%, and achieved significant improvements in app performance including a 3× faster launch time. I developed the first React Native Windows application in the region and built native plugins integrating with UAE ICP systems, contributing to a 55% increase in new client onboarding.",
-        "Currently pursuing my M.S. in Business Administration at AASTMT, Egypt, I continue to lead engineering efforts across multiple regions, provide technical leadership to distributed teams, and partner with product, security, and architecture teams to ensure governance, compliance, and technical excellence.",
+        "Throughout my journey at Mashreq, I've led the development of digital banking solutions serving over 1M+ users, enhanced mobile security posture by reducing vulnerabilities by 90%, and achieved significant improvements in app performance including a 3× faster launch time. I developed the first React Native Windows application in the region and built native plugins integrating with UAE ICP systems, contributing to a 55% increase in new client onboarding.",
+        "Currently pursuing my M.S. in Business Administration at AASTMT, Egypt, I continue to lead engineering efforts across multiple regions and have spearheaded the adoption of AI-driven development — integrating AI coding agents (Claude Code, GitHub Copilot) into daily engineering workflows and embedding AI across the full SDLC to define team standards and best practices for responsible AI-assisted engineering.",
       ],
     },
   },
@@ -89,11 +89,13 @@ export const contentEN = {
         company: "Mashreq (Mobile Platform)",
         period: "Jul 2024 - Present",
         description: [
-          "Lead engineering efforts for the Mashreq Mobile App across multiple regions (UAE, Egypt, Pakistan), supporting a user base exceeding 2M+",
+          "Lead engineering efforts for the Mashreq Mobile App across multiple regions (UAE, Egypt, Pakistan), supporting a user base exceeding 1M+",
           "Provide technical leadership, coaching, and mentorship to distributed engineering teams, resulting in 2× faster onboarding",
           "Architect scalable and secure mobile features aligned with compliance and business growth requirements",
           "Oversee end-to-end release management across Google Play, Apple App Store, and Huawei AppGallery",
           "Partner with product, security, and architecture teams to ensure governance, compliance, and technical excellence",
+          "Spearheaded the adoption of AI-driven development across the mobile platform, integrating AI coding agents (Claude Code, GitHub Copilot) into daily engineering workflows to accelerate feature delivery and improve code quality",
+          "Embedded AI across the software development lifecycle (SDLC) — from design and code generation to automated testing, code review, and documentation — and defined team standards and best practices for responsible AI-assisted engineering",
         ],
       },
       {
@@ -162,6 +164,18 @@ export const contentEN = {
     subtitle:
       `A comprehensive toolkit built over ${yearsOfExperience} years of hands-on experience in mobile engineering, web development, and enterprise-scale digital banking solutions`,
     categories: [
+      {
+        title: "AI-Driven Development",
+        skills: [
+          "AI Coding Agents (Claude Code, GitHub Copilot)",
+          "AI-Augmented SDLC",
+          "Prompt Engineering",
+          "Agentic Workflows",
+          "AI Pair Programming",
+          "Figma Make",
+          "AI Governance & Best Practices",
+        ],
+      },
       {
         title: "Mobile Engineering",
         skills: [
