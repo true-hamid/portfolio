@@ -56,8 +56,8 @@ export const contentEN = {
         description: "Building & scaling engineering solutions",
       },
       {
-        title: "Product Enabler",
-        description: "Transforming ideas into shipped features",
+        title: "AI Champion",
+        description: "Embedding AI agents across the full SDLC",
       },
       {
         title: "Team Lead",
