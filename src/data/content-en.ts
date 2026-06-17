@@ -39,7 +39,7 @@ export const contentEN = {
     heading: "Hamid Abdalrahman",
     subheading: "Building Enterprise Banking Solutions",
     description:
-      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale global digital banking solutions. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the SDLC to accelerate delivery and elevate code quality.`,
+      `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale global digital banking solutions. Specialized in mobile engineering, secure digital channels, and multi-region product delivery.`,
     cta: {
       primary: "Who I Am",
       secondary: "Download CV",
