@@ -1,6 +1,6 @@
 import { Github, Linkedin, Mail, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import profileImage from "@/assets/adebfc95059e2b057aa132fac2567ff40ecb644e.jpg";
+import profileImage from "@/assets/92846-copy.jpg";
 import { useLanguage } from "@/contexts/LanguageContext";
 import resumePDF from "@/assets/HamidAbdalrahman.pdf";
 import { trackEvent } from "@/utils/analytics";
