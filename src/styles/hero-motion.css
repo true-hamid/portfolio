@@ -1,0 +1,164 @@
+/*
+ * Hero motion — ambient aurora + orchestrated entrance.
+ *
+ * Hand-written rather than Tailwind utilities on purpose: src/index.css is a
+ * checked-in, pre-compiled Tailwind build with no build step in this project,
+ * so new utility classes in JSX would never be generated. Everything the hero
+ * animation needs lives here and is imported after index.css in main.tsx.
+ */
+
+/* ── Ambient layer ─────────────────────────────────────────────────────── */
+
+.hm-aurora {
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.38;
+  filter: blur(clamp(50px, 7vw, 110px));
+}
+
+.hm-aurora span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.hm-b1 {
+  width: 44%;
+  height: 60%;
+  left: 4%;
+  top: 6%;
+  background: #2563eb;
+  animation: hm-drift-a 19s ease-in-out infinite;
+}
+
+.hm-b2 {
+  width: 38%;
+  height: 54%;
+  right: 2%;
+  top: 14%;
+  background: #7c3aed;
+  animation: hm-drift-b 23s ease-in-out infinite;
+}
+
+.hm-b3 {
+  width: 50%;
+  height: 42%;
+  left: 24%;
+  bottom: -4%;
+  background: #0ea5e9;
+  opacity: 0.7;
+  animation: hm-drift-c 27s ease-in-out infinite;
+}
+
+/* Unequal periods so the three never settle into a visible loop. */
+@keyframes hm-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(14%, 10%, 0) scale(1.18); }
+}
+
+@keyframes hm-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); }
+  50%      { transform: translate3d(-16%, -8%, 0) scale(0.9); }
+}
+
+@keyframes hm-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-10%, -14%, 0) scale(1.22); }
+}
+
+/* Pulls the edges back down so the copy keeps its contrast over the colour. */
+.hm-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(110% 85% at 50% 45%, transparent 30%, rgba(2, 6, 18, 0.85) 100%);
+}
+
+/* ── Entrance ──────────────────────────────────────────────────────────── */
+
+/*
+ * fill-mode `both` supplies the hidden starting state, so there is no rule
+ * that hides content on its own. If these animations never run — reduced
+ * motion, an old browser — the hero renders complete and static.
+ */
+.hm-run .hm-item {
+  animation: hm-rise 0.78s cubic-bezier(0.16, 0.84, 0.3, 1) both;
+}
+
+.hm-run .hm-avatar { animation-name: hm-pop; animation-duration: 0.85s; }
+.hm-run .hm-badge  { animation-delay: 0.26s; }
+.hm-run .hm-title  { animation-delay: 0.40s; }
+.hm-run .hm-desc   { animation-delay: 0.58s; }
+.hm-run .hm-cta    { animation-delay: 0.74s; }
+.hm-run .hm-social { animation-delay: 0.88s; }
+
+/* Opacity and transform only — blurring text this large is expensive. */
+@keyframes hm-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes hm-pop {
+  from { opacity: 0; transform: scale(0.88); filter: blur(12px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+/*
+ * Owns the gradient outright instead of layering over Tailwind's gradient
+ * utilities: the `background` shorthand resets background-clip, which would
+ * drop the text clip and paint a solid bar over the headline.
+ */
+.hm-gradient {
+  background-image: linear-gradient(100deg, #60a5fa 0%, #c084fc 40%, #ede9fe 50%, #c084fc 60%, #60a5fa 100%);
+  background-size: 280% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Starts after the entrance has landed, and rests between passes. */
+.hm-run .hm-gradient {
+  animation: hm-shine 4.4s ease-in-out 1.4s infinite;
+}
+
+@keyframes hm-shine {
+  0%, 18%   { background-position: 100% 0; }
+  72%, 100% { background-position: 0 0; }
+}
+
+.hm-bob {
+  display: inline-block;
+  animation: hm-bob 2.2s ease-in-out 1.6s infinite;
+}
+
+@keyframes hm-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(22%); }
+}
+
+/* ── Adaptations ───────────────────────────────────────────────────────── */
+
+/* Big blur radii are the expensive part; ease off where the GPU is weakest. */
+@media (max-width: 640px) {
+  .hm-aurora {
+    opacity: 0.42;
+    filter: blur(clamp(38px, 12vw, 70px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm-aurora span,
+  .hm-bob,
+  .hm-run .hm-item,
+  .hm-run .hm-avatar,
+  .hm-run .hm-gradient {
+    animation: none !important;
+  }
+
+  .hm-gradient { background-position: 0 0; }
+}

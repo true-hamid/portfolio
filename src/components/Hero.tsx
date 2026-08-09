@@ -27,10 +27,15 @@ export function Hero() {
 
   return (
     <section ref={sectionRef} className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+      <div className="hm-aurora" aria-hidden="true">
+        <span className="hm-b1" />
+        <span className="hm-b2" />
+        <span className="hm-b3" />
+      </div>
+      <div className="hm-vignette" aria-hidden="true" />
       <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="mb-8 flex justify-center">
+        <div className="max-w-4xl mx-auto text-center hm-run">
+          <div className="mb-8 flex justify-center hm-item hm-avatar">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-2xl opacity-30"></div>
               <img
@@ -40,30 +45,30 @@ export function Hero() {
               />
             </div>
           </div>
-          <div className="mb-6">
+          <div className="mb-6 hm-item hm-badge">
             <span className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 mb-4">
               {hero.badge}
             </span>
           </div>
-          <h1 className="text-5xl md:text-7xl mb-6 text-white">
+          <h1 className="text-5xl md:text-7xl mb-6 text-white hm-item hm-title">
             {hero.heading}
-            <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <span className="block hm-gradient">
               {hero.subheading}
             </span>
           </h1>
-          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto hm-item hm-desc">
             {hero.description}
           </p>
-          <div className="flex gap-4 justify-center mb-12">
+          <div className="flex gap-4 justify-center mb-12 hm-item hm-cta">
             <Button size="lg" onClick={scrollToProjects}>
               {hero.cta.primary}
-              <ArrowDown className="ml-2 size-4" />
+              <ArrowDown className="ml-2 size-4 hm-bob" />
             </Button>
             <Button size="lg" variant="outline" className="bg-transparent border-slate-600 text-white hover:bg-slate-800" onClick={handleDownloadCV}>
               {hero.cta.secondary}
             </Button>
           </div>
-          <div className="flex gap-6 justify-center">
+          <div className="flex gap-6 justify-center hm-item hm-social">
             <a href={personal.github} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
               <Github className="size-6" />
             </a>
