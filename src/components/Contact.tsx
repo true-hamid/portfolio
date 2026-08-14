@@ -124,27 +124,27 @@ export function Contact() {
   const socialLinks = socialTargets.map((s, i) => ({ icon: socialIcons[i] ?? Linkedin, href: s.href, label: s.label }));
 
   return (
-    <section ref={sectionRef} className="py-24 bg-white">
+    <section ref={sectionRef} className="py-24 im-section">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 im-reveal">
             <h2 className="text-4xl md:text-5xl mb-4">{contact.heading}</h2>
-            <p className="text-xl text-slate-600">{contact.subheading}</p>
+            <p className="text-xl im-lead">{contact.subheading}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            <div>
+            <div className="im-reveal">
               <h3 className="text-2xl mb-6">{contact.infoHeading}</h3>
               <div className="space-y-6 mb-8">
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
                   const content = (
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                        <Icon className="size-5 text-blue-600" />
+                      <div className="w-12 h-12 rounded-full im-icon flex items-center justify-center flex-shrink-0">
+                        <Icon className="size-5 im-accent" />
                       </div>
                       <div>
-                        <div className="text-slate-600 mb-1">{item.label}</div>
+                        <div className="im-lead mb-1">{item.label}</div>
                         <div className="text-lg">{item.value}</div>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export function Contact() {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-colors"
+                        className="w-10 h-10 rounded-full im-social-btn flex items-center justify-center transition-colors"
                         aria-label={social.label}
                       >
                         <Icon className="size-5" />
@@ -182,7 +182,7 @@ export function Contact() {
               </div>
             </div>
 
-            <div>
+            <div className="im-reveal">
               <h3 className="text-2xl mb-6">{contact.formHeading}</h3>
 
               {submitStatus === "success" && (
@@ -203,7 +203,7 @@ export function Contact() {
                     placeholder={contact.placeholders.name}
                     value={formData.name}
                     onChange={(e) => handleFieldChange("name", e.target.value)}
-                    className={errors.name ? "!border-red-500 focus:!border-red-500" : ""}
+                    className={`im-field ${errors.name ? "!border-red-500 focus:!border-red-500" : ""}`}
                     aria-invalid={!!errors.name}
                     aria-describedby={errors.name ? "name-error" : undefined}
                   />
@@ -219,7 +219,7 @@ export function Contact() {
                     placeholder={contact.placeholders.email}
                     value={formData.email}
                     onChange={(e) => handleFieldChange("email", e.target.value)}
-                    className={errors.email ? "!border-red-500 focus:!border-red-500" : ""}
+                    className={`im-field ${errors.email ? "!border-red-500 focus:!border-red-500" : ""}`}
                     aria-invalid={!!errors.email}
                     aria-describedby={errors.email ? "email-error" : undefined}
                   />
@@ -235,7 +235,7 @@ export function Contact() {
                     rows={6}
                     value={formData.message}
                     onChange={(e) => handleFieldChange("message", e.target.value)}
-                    className={errors.message ? "!border-red-500 focus:!border-red-500" : ""}
+                    className={`im-field ${errors.message ? "!border-red-500 focus:!border-red-500" : ""}`}
                     aria-invalid={!!errors.message}
                     aria-describedby={errors.message ? "message-error" : undefined}
                   />
@@ -245,7 +245,7 @@ export function Contact() {
                     </p>
                   )}
                 </div>
-                <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" size="lg" className="w-full im-btn-primary" disabled={isSubmitting}>
                       {isSubmitting ? contact.sendingText : contact.submitButton}
                 </Button>
               </form>

@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { Metrics } from "@/components/Metrics";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
@@ -9,11 +10,18 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Contact />
-      <Footer />
+      {/*
+        Everything past the hero shares one background, so the page descends
+        through a single space rather than alternating light and dark panels.
+      */}
+      <div className="im-stage">
+        <Metrics />
+        <About />
+        <Skills />
+        <Experience />
+        <Contact />
+        <Footer />
+      </div>
     </div>
   );
 }

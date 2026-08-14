@@ -1,0 +1,298 @@
+/*
+ * Immersive layer — one continuous dark stage, scroll-driven reveals, metrics.
+ *
+ * Hand-written for the same reason as hero-motion.css: src/index.css is a
+ * checked-in, pre-compiled Tailwind v4 build and nothing in vite.config.ts
+ * regenerates it, so a new utility class written in JSX would never exist.
+ * Every class this layer introduces is defined here, and it is imported after
+ * index.css in main.tsx so these rules win the cascade against utilities of
+ * equal specificity.
+ */
+
+/* ── The stage ─────────────────────────────────────────────────────────── */
+
+/*
+ * Everything below the hero shares one background so the page reads as a
+ * single descending space instead of five stacked panels. The first stop is
+ * slate-900 — the exact colour the hero's own gradient ends on — so the seam
+ * between the two is invisible.
+ */
+.im-stage {
+  --im-heading: #f1f5f9;
+  --im-body: #cbd5e1;
+  --im-muted: #94a3b8;
+  --im-accent: #7cb2ff;
+  --im-surface: rgba(255, 255, 255, 0.04);
+  --im-surface-hover: rgba(255, 255, 255, 0.065);
+  --im-line: rgba(255, 255, 255, 0.09);
+
+  position: relative;
+  color: var(--im-body);
+  background: linear-gradient(
+    180deg,
+    #0f172a 0%,
+    #0c1428 16%,
+    #101a35 33%,
+    #141a3c 50%,
+    #17143f 67%,
+    #120f2c 84%,
+    #0a0a18 100%
+  );
+}
+
+/* Overscroll at either end reveals the page background, not the browser's. */
+html,
+body {
+  background-color: #0f172a;
+}
+
+/* Sections carry their own spacing; the stage owns all the colour. */
+.im-section {
+  background: transparent;
+}
+
+/*
+ * The hero's own gradient is overlaid by the aurora and the vignette, so its
+ * painted bottom edge is never the slate-900 the stage opens on — butting the
+ * two together leaves a visible horizontal seam. This fades the hero's last
+ * quarter into the stage's first stop so the join disappears.
+ */
+.im-hero-fade::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 26%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, #0f172a 100%);
+}
+
+/*
+ * The compiled build's --primary is near-black, which reads as a hole on the
+ * dark stage. The submit button is the one CTA down here, so it gets the
+ * accent instead.
+ */
+.im-btn-primary {
+  background: linear-gradient(180deg, #4f9dff 0%, #3b82f6 100%);
+  color: #06122b;
+  border: none;
+}
+
+.im-btn-primary:hover {
+  background: linear-gradient(180deg, #69adff 0%, #4f93f7 100%);
+}
+
+.im-stage h2,
+.im-stage h3,
+.im-stage h4 {
+  color: var(--im-heading);
+}
+
+.im-lead {
+  color: var(--im-muted);
+}
+
+.im-body {
+  color: var(--im-body);
+}
+
+.im-accent {
+  color: var(--im-accent);
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────────────── */
+
+.im-card,
+.im-panel {
+  background: var(--im-surface);
+  border: 1px solid var(--im-line);
+  backdrop-filter: blur(6px);
+}
+
+.im-card {
+  transition: transform 0.32s ease, background-color 0.32s ease,
+    border-color 0.32s ease;
+}
+
+/* Touch devices have no hover state to reward, and the lift costs a repaint. */
+@media (hover: hover) and (pointer: fine) {
+  .im-card:hover {
+    transform: translateY(-4px);
+    background: var(--im-surface-hover);
+    border-color: rgba(124, 178, 255, 0.34);
+  }
+}
+
+.im-icon {
+  background: rgba(124, 178, 255, 0.12);
+}
+
+.im-chip {
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid var(--im-line);
+  color: var(--im-body);
+}
+
+.im-social-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--im-line);
+  color: var(--im-body);
+}
+
+.im-social-btn:hover {
+  background: var(--im-accent);
+  border-color: var(--im-accent);
+  color: #0b1020;
+}
+
+/* Inputs ship their own light palette from the compiled build. */
+.im-field {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--im-line);
+  color: var(--im-heading);
+}
+
+.im-field::placeholder {
+  color: var(--im-muted);
+}
+
+.im-field:focus-visible {
+  border-color: var(--im-accent);
+  outline-color: var(--im-accent);
+}
+
+.im-footer {
+  background: transparent;
+  border-top: 1px solid var(--im-line);
+}
+
+/* ── Metrics ───────────────────────────────────────────────────────────── */
+
+/*
+ * Laid out in plain CSS rather than grid utilities. The compiled build only
+ * contains the classes the original markup happened to use, so `grid-cols-2`,
+ * `gap-10` and friends do not exist and would fail silently here.
+ */
+.im-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .im-metrics-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.im-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.8125rem;
+  color: var(--im-muted);
+  margin-bottom: 3rem;
+}
+
+.im-metric-value {
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  background-image: linear-gradient(180deg, #ffffff 0%, #9dc4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /*
+   * "1M+", "3×" and "4.8★" end in characters with neutral bidi class. Under
+   * dir="rtl" those get reordered to the head of the run and the figure reads
+   * "+1M". Pinning the run to LTR keeps every numeral intact in both locales.
+   */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.im-metric-label {
+  color: var(--im-muted);
+}
+
+.im-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Scroll-driven reveals ─────────────────────────────────────────────── */
+
+/*
+ * Gated behind @supports on purpose. Where scroll-driven timelines are
+ * missing the rule never applies, so content renders fully visible and static
+ * rather than being hidden by a starting state that nothing animates away.
+ * Transform is vertical only, which keeps it correct under dir="rtl" without
+ * a mirrored variant.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .im-reveal {
+      animation: im-rise 1s cubic-bezier(0.16, 0.84, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 78%;
+    }
+
+    /*
+     * Stagger is expressed as an offset range rather than animation-delay:
+     * on a scroll timeline, delay has no meaning — progress is position.
+     */
+    .im-stagger > *:nth-child(1) .im-reveal,
+    .im-stagger > *:nth-child(1).im-reveal {
+      animation-range: entry 0% entry 70%;
+    }
+    .im-stagger > *:nth-child(2) .im-reveal,
+    .im-stagger > *:nth-child(2).im-reveal {
+      animation-range: entry 7% entry 77%;
+    }
+    .im-stagger > *:nth-child(3) .im-reveal,
+    .im-stagger > *:nth-child(3).im-reveal {
+      animation-range: entry 14% entry 84%;
+    }
+    .im-stagger > *:nth-child(4) .im-reveal,
+    .im-stagger > *:nth-child(4).im-reveal {
+      animation-range: entry 21% entry 91%;
+    }
+    .im-stagger > *:nth-child(5) .im-reveal,
+    .im-stagger > *:nth-child(5).im-reveal {
+      animation-range: entry 28% entry 98%;
+    }
+  }
+}
+
+@keyframes im-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Adaptations ───────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .im-card {
+    transition: none;
+  }
+
+  .im-card:hover {
+    transform: none;
+  }
+}

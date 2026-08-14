@@ -1,16 +1,37 @@
-name: Deploy to murabba.com
+name: Deploy to hosting server
 
+# Production ships only from a merged pull request. Direct pushes to main no
+# longer trigger this workflow at all, so a hotfix committed straight to the
+# branch cannot reach the host without review.
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time, and never cancel one midway: a half-finished FTP
+# upload leaves the host serving a mix of old and new assets.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    # `closed` fires for abandoned pull requests too — only merges deploy.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Deploy main itself rather than the pull request's merge ref, so
+          # what ships is exactly what the branch holds after the merge.
+          ref: main
 
       - name: Setup Node
         uses: actions/setup-node@v4
