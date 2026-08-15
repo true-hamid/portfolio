@@ -26,7 +26,7 @@ export function Hero() {
   };
 
   return (
-    <section ref={sectionRef} className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <section ref={sectionRef} className="min-h-screen flex items-center justify-center relative overflow-hidden im-hero-fade bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="hm-aurora" aria-hidden="true">
         <span className="hm-b1" />
         <span className="hm-b2" />

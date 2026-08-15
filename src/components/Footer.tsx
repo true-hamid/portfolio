@@ -9,7 +9,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-slate-900 text-slate-400 py-12">
+    <footer className="im-footer im-lead py-12">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">

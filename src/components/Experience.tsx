@@ -8,36 +8,36 @@ export function Experience() {
   const sectionRef = useTrackView('Experience');
 
   return (
-    <section ref={sectionRef} id="experience" className="py-24 bg-slate-50">
+    <section ref={sectionRef} id="experience" className="py-24 im-section">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 im-reveal">
             <h2 className="text-4xl md:text-5xl mb-4">{experience.title}</h2>
-            <p className="text-xl text-slate-600">
+            <p className="text-xl im-lead">
               {experience.subtitle}
             </p>
           </div>
 
           <div className="space-y-8">
             {experience.positions.map((exp, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-sm border border-slate-200">
+              <div key={index} className="im-card rounded-xl p-8 im-reveal">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                   <div>
                     <h3 className="text-2xl mb-1">{exp.title}</h3>
-                    <div className="flex items-center gap-2 text-blue-600">
+                    <div className="flex items-center gap-2 im-accent">
                       <Briefcase className="size-4" />
                       <span>{exp.company}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-600 mt-2 md:mt-0">
+                  <div className="flex items-center gap-2 im-lead mt-2 md:mt-0">
                     <Calendar className="size-4" />
                     <span>{exp.period}</span>
                   </div>
                 </div>
                 <ul className="space-y-2">
                   {exp.description.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex gap-3 text-slate-700">
-                      <span className="text-blue-600 mt-1.5">•</span>
+                    <li key={itemIndex} className="flex gap-3 im-body">
+                      <span className="im-accent mt-1.5">•</span>
                       <span>{item}</span>
                     </li>
                   ))}

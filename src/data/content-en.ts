@@ -1,5 +1,19 @@
 import { yearsOfExperience } from "../utils/calculateExperience";
 
+/**
+ * A single counted figure in the metrics strip. `value` is the number the
+ * counter animates toward; everything else controls how it is rendered.
+ */
+export type Metric = {
+  value: number;
+  /** Fixed decimal places. Omitted means a whole number. */
+  decimals?: number;
+  /** Render via Intl compact notation — 1000000 becomes "1M". */
+  compact?: boolean;
+  suffix?: string;
+  label: string;
+};
+
 export const contentEN = {
   personal: {
     name: "Hamid Abdalrahman",
@@ -44,6 +58,34 @@ export const contentEN = {
       primary: "Who I Am",
       secondary: "Download CV",
     },
+  },
+
+  metrics: {
+    title: "Impact at a glance",
+    items: [
+      {
+        value: 1000000,
+        compact: true,
+        suffix: "+",
+        label: "Users on products I've helped ship",
+      },
+      {
+        value: 90,
+        suffix: "%",
+        label: "Reduction in app vulnerabilities",
+      },
+      {
+        value: 3,
+        suffix: "×",
+        label: "Faster app launch time",
+      },
+      {
+        value: 4.8,
+        decimals: 1,
+        suffix: "★",
+        label: "Average app store rating",
+      },
+    ] as Metric[],
   },
 
   about: {
