@@ -26,18 +26,21 @@
 }
 
 /*
- * Single column below the md breakpoint: a block container lets the device
- * stick against the whole section while the panels scroll under it. In the
- * two-column grid the sticky child needs align-self:start, or it stretches to
- * the row height and never has anywhere to travel.
+ * Below the md breakpoint there's no second column for the phone to live in,
+ * so it renders once, in normal flow, above the panel list — not sticky.
+ * position:sticky here would pin the phone at the top of the viewport for
+ * the full scroll height of every panel combined (that's how sticky works:
+ * it stays stuck as long as its containing block is still in view), and
+ * since .dv-phone/.dv-screen are fully opaque, that means panel text
+ * scrolling past underneath would be genuinely hidden behind it, not just
+ * visually layered — a real readability bug, not a stylistic choice.
  */
 .dv-sticky {
-  position: sticky;
-  top: 0;
-  height: 46vh;
+  position: static;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-block: 2.5rem;
   z-index: 2;
 }
 
@@ -55,9 +58,19 @@
     align-items: start;
   }
 
+  /*
+   * The two-column grid gives the phone its own lane, so sticky no longer
+   * means "on top of the text" — it means "stays in its lane while the
+   * other lane scrolls past beside it." align-self:start keeps the sticky
+   * child from stretching to the row's full height, which would give it
+   * nowhere left to travel.
+   */
   .dv-sticky {
+    position: sticky;
+    top: 0;
     align-self: start;
     height: 100vh;
+    padding-block: 0;
   }
 
   .dv-panel {
