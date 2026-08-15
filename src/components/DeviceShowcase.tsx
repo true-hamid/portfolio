@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTrackView } from "@/hooks/useTrackView";
-import type { ShowcasePanel, ShowcaseScreen } from "@/data/content-en";
+import type { ShowcasePanel } from "@/data/content-en";
 
 /** How far the device turns between the first panel and the last. */
 const TURN_START = -14;
@@ -15,70 +15,14 @@ function Screen({ panel, active }: { panel: ShowcasePanel; active: boolean }) {
       <div className="dv-app-label">{panel.screenLabel}</div>
       <div className="dv-app-figure">{screen.figure}</div>
       <div className="dv-app-sub">{screen.caption}</div>
-      <ScreenBody screen={screen} />
+      {screen.rows.map((row) => (
+        <div key={row} className="dv-row">
+          <span className="dv-dot" />
+          {row}
+        </div>
+      ))}
     </div>
   );
-}
-
-function ScreenBody({ screen }: { screen: ShowcaseScreen }) {
-  switch (screen.kind) {
-    case "reach":
-      return (
-        <>
-          {screen.regions.map((region) => (
-            <div key={region} className="dv-row">
-              <span className="dv-dot" />
-              {region}
-            </div>
-          ))}
-        </>
-      );
-
-    case "security":
-      return (
-        <>
-          {screen.checks.map((check) => (
-            <div key={check} className="dv-row">
-              <span className="dv-check" aria-hidden="true">
-                ✓
-              </span>
-              {check}
-            </div>
-          ))}
-        </>
-      );
-
-    case "performance":
-      // Relative widths only — the public record is the 3x ratio, not a timing.
-      return (
-        <>
-          <div className="dv-bar-label">
-            <span>{screen.beforeLabel}</span>
-          </div>
-          <div className="dv-bar">
-            <span style={{ ["--dv-w" as string]: "100%" }} />
-          </div>
-          <div className="dv-bar-label">
-            <span>{screen.afterLabel}</span>
-          </div>
-          <div className="dv-bar">
-            <span style={{ ["--dv-w" as string]: "33%" }} />
-          </div>
-        </>
-      );
-
-    case "ai":
-      return (
-        <>
-          {screen.stages.map((stage) => (
-            <div key={stage} className="dv-row">
-              <span className="dv-dot" />
-              {stage}
-            </div>
-          ))}
-        </>
-      );
-  }
 }
 
 export function DeviceShowcase() {

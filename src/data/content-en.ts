@@ -15,21 +15,15 @@ export type Metric = {
 };
 
 /**
- * What renders on the phone screen for a given panel. The screens are
- * deliberately abstract: they illustrate the outcome, and are not depictions
- * of any employer's actual product interface.
+ * What renders on the phone screen for a given panel. Deliberately limited to
+ * a headline figure and a short list of places or roles — narrative framing
+ * only, nothing that characterizes how any product is actually built.
  */
-export type ShowcaseScreen =
-  | { kind: "reach"; figure: string; caption: string; regions: string[] }
-  | { kind: "security"; figure: string; caption: string; checks: string[] }
-  | {
-      kind: "performance";
-      figure: string;
-      caption: string;
-      beforeLabel: string;
-      afterLabel: string;
-    }
-  | { kind: "ai"; figure: string; caption: string; stages: string[] };
+export type ShowcaseScreen = {
+  figure: string;
+  caption: string;
+  rows: string[];
+};
 
 export type ShowcasePanel = {
   eyebrow: string;
@@ -114,68 +108,30 @@ export const contentEN = {
   },
 
   showcase: {
-    title: "Selected Work",
+    title: "Building at Scale",
     subtitle:
-      "Four things I've shipped, and what changed because of them.",
+      "Enterprise banking solutions used by more than a million customers, across regions.",
     panels: [
       {
         eyebrow: "Scale",
-        title: "One app, three regulators",
-        body: "Leading the Mashreq mobile platform across the UAE, Egypt and Pakistan — a single codebase serving more than a million people under three separate compliance regimes, released across Google Play, the App Store and Huawei AppGallery.",
+        title: "One product, multiple geographies",
+        body: "I lead engineering for enterprise banking solutions used by more than a million customers across the UAE, Egypt and Pakistan.",
         screenLabel: "Reach",
         screen: {
-          kind: "reach",
           figure: "1M+",
-          caption: "Active users across three regions",
-          regions: ["United Arab Emirates", "Egypt", "Pakistan"],
+          caption: "Customers across three regions",
+          rows: ["United Arab Emirates", "Egypt", "Pakistan"],
         },
       },
       {
-        eyebrow: "Security",
-        title: "90% fewer vulnerabilities",
-        body: "Hardened the mobile security posture with stronger encryption, layered authentication and proactive threat detection — working alongside cybersecurity teams through audits and remediation.",
-        screenLabel: "Posture",
+        eyebrow: "Leadership",
+        title: `${yearsOfExperience} years building and leading`,
+        body: "From individual contributor to Global Lead Engineer, growing distributed teams that deliver enterprise banking solutions at scale.",
+        screenLabel: "Path",
         screen: {
-          kind: "security",
-          figure: "90%",
-          caption: "Reduction in known vulnerabilities",
-          checks: [
-            "Encryption in transit and at rest",
-            "Layered authentication",
-            "Proactive threat detection",
-            "Audited and hardened",
-          ],
-        },
-      },
-      {
-        eyebrow: "Performance",
-        title: "Three times faster to first screen",
-        body: "Re-architected the startup path and cleared the bottlenecks behind it. The app now reaches its first usable screen three times faster than it did before.",
-        screenLabel: "Launch time",
-        screen: {
-          kind: "performance",
-          figure: "3×",
-          caption: "Faster cold start",
-          beforeLabel: "Before",
-          afterLabel: "After",
-        },
-      },
-      {
-        eyebrow: "AI-driven delivery",
-        title: "Agents across the lifecycle",
-        body: "Embedded AI coding agents into daily engineering workflows and across the full SDLC — design, code generation, automated testing, review and documentation — and defined the team standards for using them responsibly.",
-        screenLabel: "SDLC coverage",
-        screen: {
-          kind: "ai",
-          figure: "SDLC",
-          caption: "Agent-assisted end to end",
-          stages: [
-            "Design",
-            "Code generation",
-            "Automated testing",
-            "Code review",
-            "Documentation",
-          ],
+          figure: `${yearsOfExperience}`,
+          caption: "Years in enterprise banking engineering",
+          rows: ["Dev Engineer", "Senior Dev Engineer", "Global Lead Engineer"],
         },
       },
     ] as ShowcasePanel[],
