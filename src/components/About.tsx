@@ -1,13 +1,14 @@
-import { Code2, Users, Rocket, GitPullRequestArrow } from "lucide-react";
+import { Shield, Zap, Star, Rocket, GitPullRequestArrow } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTrackView } from "@/hooks/useTrackView";
+import { DeviceShowcase } from "@/components/DeviceShowcase";
 
 export function About() {
   const { content } = useLanguage();
   const { about } = content;
   const sectionRef = useTrackView('About');
 
-  const icons = [Code2, Rocket, GitPullRequestArrow, Users];
+  const icons = [Shield, Zap, Star, Rocket, GitPullRequestArrow];
   const highlights = about.highlights.map((highlight, index) => ({
     ...highlight,
     icon: icons[index],
@@ -24,7 +25,7 @@ export function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8 mb-16 im-stagger">
+          <div className="im-highlights-grid mb-16 im-stagger">
             {highlights.map((item, index) => {
               const Icon = item.icon;
               return (
@@ -32,13 +33,24 @@ export function About() {
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full im-icon mb-4">
                     <Icon className="size-8 im-accent" />
                   </div>
-                  <h3 className="mb-2">{item.title}</h3>
+                  <h3 className="im-figure mb-2">{item.title}</h3>
                   <p className="im-lead">{item.description}</p>
                 </div>
               );
             })}
           </div>
+        </div>
 
+        {/*
+          Renders outside .max-w-6xl on purpose — .dv-inner already sets its
+          own max-width and padding-inline. Nesting it inside another
+          max-w-6xl wrapper wouldn't break the width (both resolve to the
+          same 72rem), but it would stack the two paddings and inset the
+          phone further than the header/journey blocks above and below it.
+        */}
+        <DeviceShowcase />
+
+        <div className="max-w-6xl mx-auto">
           <div className="im-panel rounded-2xl p-8 md:p-12 im-reveal">
             <h3 className="text-2xl mb-4">{about.journey.title}</h3>
             {about.journey.paragraphs.map((paragraph, index) => (

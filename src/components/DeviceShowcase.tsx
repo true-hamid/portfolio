@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useTrackView } from "@/hooks/useTrackView";
 import type { ShowcasePanel } from "@/data/content-en";
 
 /** How far the device turns between the first panel and the last. */
@@ -32,7 +31,6 @@ export function DeviceShowcase() {
   // has to mirror too or it ends up angled away from the copy instead of
   // toward it.
   const turnSign = dir === "rtl" ? -1 : 1;
-  const sectionRef = useTrackView("Showcase");
   const panelRefs = useRef<(HTMLElement | null)[]>([]);
   const [active, setActive] = useState(0);
 
@@ -61,12 +59,7 @@ export function DeviceShowcase() {
   }, [showcase.panels.length]);
 
   return (
-    <section ref={sectionRef} className="dv-showcase im-section">
-      <div className="dv-head im-reveal">
-        <h2 className="text-4xl md:text-5xl mb-4">{showcase.title}</h2>
-        <p>{showcase.subtitle}</p>
-      </div>
-
+    <div className="dv-showcase">
       <div className="dv-inner">
         <div className="dv-sticky">
           <div className="dv-stage">
@@ -112,6 +105,6 @@ export function DeviceShowcase() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

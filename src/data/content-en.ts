@@ -1,20 +1,6 @@
 import { yearsOfExperience } from "../utils/calculateExperience";
 
 /**
- * A single counted figure in the metrics strip. `value` is the number the
- * counter animates toward; everything else controls how it is rendered.
- */
-export type Metric = {
-  value: number;
-  /** Fixed decimal places. Omitted means a whole number. */
-  decimals?: number;
-  /** Render via Intl compact notation — 1000000 becomes "1M". */
-  compact?: boolean;
-  suffix?: string;
-  label: string;
-};
-
-/**
  * What renders on the phone screen for a given panel. Deliberately limited to
  * a headline figure and a short list of places or roles — narrative framing
  * only, nothing that characterizes how any product is actually built.
@@ -79,38 +65,7 @@ export const contentEN = {
     },
   },
 
-  metrics: {
-    title: "Impact at a glance",
-    items: [
-      {
-        value: 1000000,
-        compact: true,
-        suffix: "+",
-        label: "Users on products I've helped ship",
-      },
-      {
-        value: 90,
-        suffix: "%",
-        label: "Reduction in app vulnerabilities",
-      },
-      {
-        value: 3,
-        suffix: "×",
-        label: "Faster app launch time",
-      },
-      {
-        value: 4.8,
-        decimals: 1,
-        suffix: "★",
-        label: "Average app store rating",
-      },
-    ] as Metric[],
-  },
-
   showcase: {
-    title: "Building at Scale",
-    subtitle:
-      "Enterprise banking solutions used by more than a million customers, across regions.",
     panels: [
       {
         eyebrow: "Scale",
@@ -143,8 +98,16 @@ export const contentEN = {
       `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale digital banking solutions across the UAE, Egypt, and Pakistan. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Trusted technical leader with a strong record of improving app performance, driving security maturity, and accelerating engineering productivity. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the software development lifecycle (SDLC) to accelerate delivery and elevate code quality.`,
     highlights: [
       {
-        title: `${yearsOfExperience} Years`,
-        description: "Building & scaling engineering solutions",
+        title: "90%",
+        description: "Reduction in app vulnerabilities",
+      },
+      {
+        title: "3×",
+        description: "Faster app launch time",
+      },
+      {
+        title: "4.8★",
+        description: "Average app store rating",
       },
       {
         title: "AI Champion",
@@ -153,10 +116,6 @@ export const contentEN = {
       {
         title: "Team Lead",
         description: "Empowering engineering teams to excel",
-      },
-      {
-        title: "1M+ Users",
-        description: "Using products I helped deliver",
       },
     ],
     journey: {

@@ -44,37 +44,7 @@ export const contentAR: ContentType = {
     },
   },
 
-  metrics: {
-    title: "الأثر في لمحة",
-    items: [
-      {
-        value: 1000000,
-        compact: true,
-        suffix: "+",
-        label: "مستخدم لمنتجات ساهمت في إطلاقها",
-      },
-      {
-        value: 90,
-        suffix: "%",
-        label: "انخفاض في الثغرات الأمنية",
-      },
-      {
-        value: 3,
-        suffix: "×",
-        label: "أسرع في زمن إقلاع التطبيق",
-      },
-      {
-        value: 4.8,
-        decimals: 1,
-        suffix: "★",
-        label: "متوسط تقييم متجر التطبيقات",
-      },
-    ],
-  },
-
   showcase: {
-    title: "البناء على نطاق واسع",
-    subtitle: "حلول مصرفية للمؤسسات يستخدمها أكثر من مليون عميل، عبر عدة مناطق.",
     panels: [
       {
         eyebrow: "النطاق",
@@ -106,8 +76,16 @@ export const contentAR: ContentType = {
     subtitle: `مهندس قائد مع ${yearsOfExperience} سنين من الخبرة في تصميم وتطوير حلول مصرفية رقمية عالمية على مستوى المؤسسات. متخصص في هندسة التطبيقات، القنوات الرقمية الآمنة، وتقديم المنتجات متعددة المناطق. خبير التطوير بالذكاء الصناعي، امتلك مهارة بناء الوكلاء والممارسات المعززة بالذكاء الصناعي (AI agent and AI augmented practices) لتسريع التطوير والارتقاء بجودة الكود.`,
     highlights: [
       {
-        title: `${yearsOfExperience} سنة`,
-        description: "بناء وتطوير الحلول الهندسية",
+        title: "90%",
+        description: "انخفاض في الثغرات الأمنية",
+      },
+      {
+        title: "3×",
+        description: "أسرع في زمن إقلاع التطبيق",
+      },
+      {
+        title: "4.8★",
+        description: "متوسط تقييم متجر التطبيقات",
       },
       {
         title: "رائد الذكاء الصناعي",
@@ -116,10 +94,6 @@ export const contentAR: ContentType = {
       {
         title: "قائد فريق",
         description: "تمكين الفرق الهندسية للتفوق",
-      },
-      {
-        title: "أكثر من مليون مستخدم",
-        description: "يستخدمون المنتجات التي ساعدت في تطويرها",
       },
     ],
     journey: {

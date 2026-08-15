@@ -13,21 +13,10 @@
 
 /* ── Layout ────────────────────────────────────────────────────────────── */
 
+/* position:relative — needed as the sticky phone's containing context; the
+   parent About section's py-24 owns vertical spacing now. */
 .dv-showcase {
   position: relative;
-  padding-block: 6rem;
-}
-
-.dv-head {
-  max-width: 48rem;
-  margin: 0 auto 2rem;
-  text-align: center;
-  padding-inline: 1rem;
-}
-
-.dv-head p {
-  color: var(--im-muted);
-  font-size: 1.125rem;
 }
 
 .dv-inner {
