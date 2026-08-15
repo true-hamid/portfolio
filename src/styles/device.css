@@ -26,21 +26,46 @@
 }
 
 /*
- * Below the md breakpoint there's no second column for the phone to live in,
- * so it renders once, in normal flow, above the panel list — not sticky.
- * position:sticky here would pin the phone at the top of the viewport for
- * the full scroll height of every panel combined (that's how sticky works:
- * it stays stuck as long as its containing block is still in view), and
- * since .dv-phone/.dv-screen are fully opaque, that means panel text
- * scrolling past underneath would be genuinely hidden behind it, not just
- * visually layered — a real readability bug, not a stylistic choice.
+ * Two columns at every width, not just desktop — that's the point. A single
+ * shared column can't have both an always-visible opaque phone and
+ * always-readable text without one covering the other: sticky positioning
+ * stays stuck for as long as its containing block is in view, so a phone
+ * stacked above the panel list either pins on top of the text scrolling
+ * underneath it (unreadable) or has to stop being sticky (invisible for
+ * every panel after the first). Giving it its own narrow lane sidesteps the
+ * problem entirely instead of trading one failure mode for the other — the
+ * phone just shrinks, it doesn't change behaviour.
+ */
+.dv-inner {
+  display: grid;
+  grid-template-columns: minmax(96px, 30vw) 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+/*
+ * The grid gives the phone its own lane, so sticky means "stays in its lane
+ * while the other lane scrolls past beside it," not "on top of the text."
+ * align-self:start keeps it from stretching to the row's full height, which
+ * would leave it nowhere to travel.
+ */
+/*
+ * Sized to its content, not the viewport: sticky's own release point is
+ * "container height minus sticky element's own height" — an artificially
+ * tall sticky box (100vh) eats into that budget for no reason once the
+ * phone inside it is this small, releasing well before the last panel has
+ * had its turn. Auto height keeps the release point tracking the actual
+ * panel stack instead of a fixed height that has nothing to do with it.
  */
 .dv-sticky {
-  position: static;
+  position: sticky;
+  top: 1.5rem;
+  align-self: start;
+  height: auto;
+  padding-block: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-block: 2.5rem;
   z-index: 2;
 }
 
@@ -52,23 +77,12 @@
 
 @media (min-width: 768px) {
   .dv-inner {
-    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    align-items: start;
   }
 
-  /*
-   * The two-column grid gives the phone its own lane, so sticky no longer
-   * means "on top of the text" — it means "stays in its lane while the
-   * other lane scrolls past beside it." align-self:start keeps the sticky
-   * child from stretching to the row's full height, which would give it
-   * nowhere left to travel.
-   */
   .dv-sticky {
-    position: sticky;
     top: 0;
-    align-self: start;
     height: 100vh;
     padding-block: 0;
   }
@@ -81,7 +95,7 @@
 /* ── Story panels ──────────────────────────────────────────────────────── */
 
 .dv-panel-inner {
-  padding-block: 2rem;
+  padding-block: 1.25rem;
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
@@ -99,15 +113,33 @@
 }
 
 .dv-panel h3 {
-  font-size: clamp(1.5rem, 3vw, 2.125rem);
-  line-height: 1.25;
-  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
   color: var(--im-heading);
 }
 
 .dv-panel p {
+  font-size: 0.9375rem;
   color: var(--im-body);
-  line-height: 1.7;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .dv-panel-inner {
+    padding-block: 2rem;
+  }
+
+  .dv-panel h3 {
+    font-size: clamp(1.5rem, 3vw, 2.125rem);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .dv-panel p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
 }
 
 /* ── The device ────────────────────────────────────────────────────────── */
@@ -122,9 +154,17 @@
   --dv-tilt: 3deg;
 
   position: relative;
-  width: clamp(190px, 26vw, 290px);
+  /*
+   * width:100% doesn't work here — .dv-stage and .dv-float (its ancestors)
+   * have no explicit width of their own, so there's no definite containing
+   * block for a percentage to resolve against, and it collapses instead of
+   * filling the grid column. Mirroring the column's own minmax(96px, 30vw)
+   * formula directly sidesteps that: no containing-block dependency, and it
+   * still tracks the same lane width the grid track actually computes.
+   */
+  width: clamp(96px, 30vw, 160px);
   aspect-ratio: 9 / 19.5;
-  border-radius: clamp(28px, 3.4vw, 42px);
+  border-radius: 16px;
   padding: clamp(6px, 0.8vw, 10px);
   transform-style: preserve-3d;
   transform: rotateY(var(--dv-turn)) rotateX(var(--dv-tilt));
@@ -136,6 +176,13 @@
     0 0 0 1px rgba(255, 255, 255, 0.08),
     0 30px 70px -20px rgba(0, 0, 0, 0.75),
     0 8px 24px -8px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 768px) {
+  .dv-phone {
+    width: clamp(190px, 26vw, 290px);
+    border-radius: clamp(28px, 3.4vw, 42px);
+  }
 }
 
 /*
@@ -213,19 +260,19 @@
 }
 
 .dv-app-label {
-  font-size: 0.5rem;
-  letter-spacing: 0.14em;
+  font-size: 0.4375rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #64789d;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .dv-app-figure {
-  font-size: 1.75rem;
+  font-size: 1.125rem;
   line-height: 1.1;
   color: #ffffff;
   letter-spacing: -0.02em;
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;
 
   /* Same bidi guard as the metrics strip: trailing +, x and star are neutral. */
   direction: ltr;
@@ -233,26 +280,26 @@
 }
 
 .dv-app-sub {
-  font-size: 0.5625rem;
+  font-size: 0.4375rem;
   color: #7d8fb3;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 }
 
 .dv-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.5rem;
-  margin-bottom: 0.3rem;
-  border-radius: 0.5rem;
+  gap: 0.3rem;
+  padding: 0.3rem 0.4rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.4rem;
   background: rgba(255, 255, 255, 0.045);
-  font-size: 0.5625rem;
+  font-size: 0.4375rem;
   color: #c2cfe4;
 }
 
 .dv-dot {
-  width: 0.3rem;
-  height: 0.3rem;
+  width: 0.25rem;
+  height: 0.25rem;
   border-radius: 999px;
   background: #4f9dff;
   flex: none;
@@ -263,18 +310,18 @@
 .dv-stats {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  margin-top: 0.25rem;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
 }
 
 .dv-stat {
-  padding: 0.55rem 0.65rem;
-  border-radius: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
   background: rgba(255, 255, 255, 0.045);
 }
 
 .dv-stat-value {
-  font-size: 1.125rem;
+  font-size: 0.8125rem;
   line-height: 1.15;
   color: #ffffff;
   letter-spacing: -0.02em;
@@ -286,7 +333,7 @@
 }
 
 .dv-stat-label {
-  font-size: 0.5625rem;
+  font-size: 0.4375rem;
   color: #7d8fb3;
   margin-top: 0.1rem;
 }
@@ -295,30 +342,95 @@
    figures above: this is a translated phrase, not a number with a trailing
    symbol, so there's no neutral character for RTL to reorder. */
 .dv-badge-label {
-  font-size: 1.375rem;
+  font-size: 0.9375rem;
   line-height: 1.2;
   color: #ffffff;
   letter-spacing: -0.01em;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 .dv-badge-description {
-  font-size: 0.625rem;
+  font-size: 0.4375rem;
   color: #7d8fb3;
   line-height: 1.4;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.6rem;
 }
 
 .dv-badge-icon {
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 999px;
   background: rgba(124, 178, 255, 0.14);
   color: #7cb2ff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+@media (min-width: 768px) {
+  .dv-app-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.5rem;
+  }
+
+  .dv-app-figure {
+    font-size: 1.75rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .dv-app-sub {
+    font-size: 0.5625rem;
+    margin-bottom: 1rem;
+  }
+
+  .dv-row {
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    font-size: 0.5625rem;
+  }
+
+  .dv-dot {
+    width: 0.3rem;
+    height: 0.3rem;
+  }
+
+  .dv-stats {
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+
+  .dv-stat {
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.6rem;
+  }
+
+  .dv-stat-value {
+    font-size: 1.125rem;
+  }
+
+  .dv-stat-label {
+    font-size: 0.5625rem;
+  }
+
+  .dv-badge-label {
+    font-size: 1.375rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .dv-badge-description {
+    font-size: 0.625rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .dv-badge-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.85rem;
+  }
 }
 
 /*
@@ -334,7 +446,7 @@
   z-index: 2;
   display: flex;
   justify-content: space-around;
-  padding: 0.55rem 0.5rem;
+  padding: 0.35rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -347,6 +459,12 @@
 
 .dv-tab-active {
   color: #7cb2ff;
+}
+
+@media (min-width: 768px) {
+  .dv-tabbar {
+    padding: 0.55rem 0.5rem;
+  }
 }
 
 /* ── Adaptations ───────────────────────────────────────────────────────── */
