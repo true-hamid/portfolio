@@ -2,14 +2,13 @@ import { yearsOfExperience } from "../utils/calculateExperience";
 
 /**
  * What renders on the phone screen for a given panel. Deliberately limited to
- * a headline figure and a short list of places or roles — narrative framing
- * only, nothing that characterizes how any product is actually built.
+ * a headline figure/short list, or a small set of standalone stats — narrative
+ * framing only, nothing that characterizes how any product is actually built.
  */
-export type ShowcaseScreen = {
-  figure: string;
-  caption: string;
-  rows: string[];
-};
+export type ShowcaseScreen =
+  | { kind: "story"; figure: string; caption: string; rows: string[] }
+  | { kind: "stats"; stats: { value: string; label: string }[] }
+  | { kind: "badge"; label: string; description: string };
 
 export type ShowcasePanel = {
   eyebrow: string;
@@ -73,6 +72,7 @@ export const contentEN = {
         body: "I lead engineering for enterprise banking solutions used by more than a million customers across the UAE, Egypt and Pakistan.",
         screenLabel: "Reach",
         screen: {
+          kind: "story",
           figure: "1M+",
           caption: "Customers across three regions",
           rows: ["United Arab Emirates", "Egypt", "Pakistan"],
@@ -84,9 +84,46 @@ export const contentEN = {
         body: "From individual contributor to Global Lead Engineer, growing distributed teams that deliver enterprise banking solutions at scale.",
         screenLabel: "Path",
         screen: {
+          kind: "story",
           figure: `${yearsOfExperience}`,
           caption: "Years in enterprise banking engineering",
           rows: ["Dev Engineer", "Senior Dev Engineer", "Global Lead Engineer"],
+        },
+      },
+      {
+        eyebrow: "Impact",
+        title: "Proof in the numbers",
+        body: "Fewer vulnerabilities, faster launches, and consistently strong ratings from the people using what I've helped ship.",
+        screenLabel: "Impact",
+        screen: {
+          kind: "stats",
+          stats: [
+            { value: "90%", label: "Reduction in app vulnerabilities" },
+            { value: "3×", label: "Faster app launch time" },
+            { value: "4.8★", label: "Average app store rating" },
+          ],
+        },
+      },
+      {
+        eyebrow: "AI Champion",
+        title: "Championing AI-driven development",
+        body: "Embedding AI coding agents and AI-augmented practices across the full software development lifecycle to accelerate delivery and elevate code quality.",
+        screenLabel: "Practice",
+        screen: {
+          kind: "badge",
+          label: "AI Champion",
+          description: "Embedding AI agents across the full SDLC",
+        },
+      },
+      {
+        eyebrow: "Team Lead",
+        title: "Leading distributed engineering teams",
+        body: "Providing technical leadership, coaching, and mentorship to engineering teams — empowering them to excel.",
+        screenLabel: "Leadership",
+        screen: {
+          kind: "badge",
+          label: "Team Lead",
+          description: "Empowering engineering teams to excel",
         },
       },
     ] as ShowcasePanel[],
@@ -96,28 +133,6 @@ export const contentEN = {
     title: "About Me",
     subtitle:
       `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale digital banking solutions across the UAE, Egypt, and Pakistan. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Trusted technical leader with a strong record of improving app performance, driving security maturity, and accelerating engineering productivity. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the software development lifecycle (SDLC) to accelerate delivery and elevate code quality.`,
-    highlights: [
-      {
-        title: "90%",
-        description: "Reduction in app vulnerabilities",
-      },
-      {
-        title: "3×",
-        description: "Faster app launch time",
-      },
-      {
-        title: "4.8★",
-        description: "Average app store rating",
-      },
-      {
-        title: "AI Champion",
-        description: "Embedding AI agents across the full SDLC",
-      },
-      {
-        title: "Team Lead",
-        description: "Empowering engineering teams to excel",
-      },
-    ],
     journey: {
       title: "My Journey",
       paragraphs: [

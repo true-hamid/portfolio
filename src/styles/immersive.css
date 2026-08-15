@@ -167,37 +167,6 @@ body {
   border-top: 1px solid var(--im-line);
 }
 
-/* ── Highlights ────────────────────────────────────────────────────────── */
-
-/*
- * Laid out in plain CSS rather than grid utilities. The compiled build only
- * contains the classes the original markup happened to use — no grid-cols
- * variant above 4 exists at any breakpoint — so a 5-item row needs its own
- * rule rather than a `md:grid-cols-5` that would silently fail to apply.
- */
-.im-highlights-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2rem 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .im-highlights-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
-}
-
-/*
- * "90%", "3×" and "4.8★" end in characters with neutral bidi class. Under
- * dir="rtl" those get reordered to the head of the run and the figure reads
- * "%90". Pinning the run to LTR keeps every figure intact in both locales.
- * Safe no-op on the two non-numeric highlights ("AI Champion", "Team Lead").
- */
-.im-figure {
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
 /* ── Scroll-driven reveals ─────────────────────────────────────────────── */
 
 /*

@@ -6,20 +6,54 @@ import type { ShowcasePanel } from "@/data/content-en";
 const TURN_START = -14;
 const TURN_STEP = 4.5;
 
-function Screen({ panel, active }: { panel: ShowcasePanel; active: boolean }) {
-  const { screen } = panel;
+function ScreenBody({ screen }: { screen: ShowcasePanel["screen"] }) {
+  switch (screen.kind) {
+    case "story":
+      return (
+        <>
+          <div className="dv-app-figure">{screen.figure}</div>
+          <div className="dv-app-sub">{screen.caption}</div>
+          {screen.rows.map((row) => (
+            <div key={row} className="dv-row">
+              <span className="dv-dot" />
+              {row}
+            </div>
+          ))}
+        </>
+      );
 
+    case "stats":
+      return (
+        <div className="dv-stats">
+          {screen.stats.map((stat) => (
+            <div key={stat.label} className="dv-stat">
+              <div className="dv-stat-value">{stat.value}</div>
+              <div className="dv-stat-label">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      );
+
+    case "badge":
+      // Plain translated text — no bidi-isolate guard here, unlike the
+      // figures above. That guard exists because "1M+"/"90%"/"×3" end in
+      // bidi-neutral characters that reorder under RTL; a whole phrase like
+      // "رائد الذكاء الصناعي" has no such character and forcing it to LTR
+      // would just misalign it against the rest of the Arabic layout.
+      return (
+        <>
+          <div className="dv-badge-label">{screen.label}</div>
+          <div className="dv-badge-description">{screen.description}</div>
+        </>
+      );
+  }
+}
+
+function Screen({ panel, active }: { panel: ShowcasePanel; active: boolean }) {
   return (
     <div className="dv-app" data-active={active}>
       <div className="dv-app-label">{panel.screenLabel}</div>
-      <div className="dv-app-figure">{screen.figure}</div>
-      <div className="dv-app-sub">{screen.caption}</div>
-      {screen.rows.map((row) => (
-        <div key={row} className="dv-row">
-          <span className="dv-dot" />
-          {row}
-        </div>
-      ))}
+      <ScreenBody screen={panel.screen} />
     </div>
   );
 }

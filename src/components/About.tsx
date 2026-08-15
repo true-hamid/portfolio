@@ -1,4 +1,3 @@
-import { Shield, Zap, Star, Rocket, GitPullRequestArrow } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTrackView } from "@/hooks/useTrackView";
 import { DeviceShowcase } from "@/components/DeviceShowcase";
@@ -7,12 +6,6 @@ export function About() {
   const { content } = useLanguage();
   const { about } = content;
   const sectionRef = useTrackView('About');
-
-  const icons = [Shield, Zap, Star, Rocket, GitPullRequestArrow];
-  const highlights = about.highlights.map((highlight, index) => ({
-    ...highlight,
-    icon: icons[index],
-  }));
 
   return (
     <section ref={sectionRef} id="about" className="py-24 im-section">
@@ -23,21 +16,6 @@ export function About() {
             <p className="text-xl im-lead max-w-3xl mx-auto">
               {about.subtitle}
             </p>
-          </div>
-
-          <div className="im-highlights-grid mb-16 im-stagger">
-            {highlights.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div key={index} className="text-center im-reveal">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full im-icon mb-4">
-                    <Icon className="size-8 im-accent" />
-                  </div>
-                  <h3 className="im-figure mb-2">{item.title}</h3>
-                  <p className="im-lead">{item.description}</p>
-                </div>
-              );
-            })}
           </div>
         </div>
 

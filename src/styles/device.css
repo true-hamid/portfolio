@@ -245,6 +245,56 @@
   flex: none;
 }
 
+/* A handful of standalone figures, stacked — distinct from the single-figure
+   .dv-app-figure treatment above, since there's no one headline number here. */
+.dv-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.dv-stat {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.dv-stat-value {
+  font-size: 1.125rem;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+
+  /* Same bidi guard as .dv-app-figure: trailing %, × and ★ are neutral. */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.dv-stat-label {
+  font-size: 0.5625rem;
+  color: #7d8fb3;
+  margin-top: 0.1rem;
+}
+
+/* A single qualitative label + description — no bidi guard, unlike the
+   figures above: this is a translated phrase, not a number with a trailing
+   symbol, so there's no neutral character for RTL to reorder. */
+.dv-badge-label {
+  font-size: 1.375rem;
+  line-height: 1.2;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4rem;
+}
+
+.dv-badge-description {
+  font-size: 0.625rem;
+  color: #7d8fb3;
+  line-height: 1.4;
+}
+
 /* ── Adaptations ───────────────────────────────────────────────────────── */
 
 /*
