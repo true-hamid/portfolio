@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import "./styles/hero-motion.css";
 import "./styles/immersive.css";
+import "./styles/device.css";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
 createRoot(document.getElementById("root")!).render(
