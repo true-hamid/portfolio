@@ -1,0 +1,87 @@
+name: Deploy core (reusable)
+
+# The actual build-and-ship steps, shared by deploy.yml (forward deploys from
+# main) and rollback.yml (re-deploys of a previously tagged release). Neither
+# caller runs this directly — it only triggers via workflow_call.
+#
+# Rollback works by rebuilding from the tagged source rather than storing and
+# replaying old build/ artifacts. Build artifacts expire; a git tag doesn't,
+# and rebuilding guarantees the rollback reproduces exactly what that commit
+# would have produced, dependencies included, rather than trusting a cached
+# artifact that might have quietly aged out of retention.
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build and deploy — a branch, SHA, or tag.
+        required: true
+        type: string
+      tag_label:
+        description: Optional suffix appended to this deploy's tag (e.g. "rollback").
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          # Full history, not just the checked-out commit: tagging needs it,
+          # and the ref this job checks out is sometimes a tag rather than a
+          # branch tip. fetch-tags is explicit rather than relied-on-by-default
+          # — actions/checkout's tag-fetching behavior with fetch-depth: 0
+          # alone is version-dependent, and a rollback silently missing a tag
+          # is exactly the kind of failure this workflow exists to prevent.
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+        env:
+          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
+          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
+          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+
+      - name: Deploy over FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build/
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+
+      - name: Tag this deploy
+        # Only after a successful FTP deploy — a tag should mean "this was
+        # actually live," not "this was attempted."
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          short_sha="$(git rev-parse --short HEAD)"
+          tag="deploy-${{ github.run_number }}-${short_sha}"
+          if [ -n "${{ inputs.tag_label }}" ]; then
+            tag="${tag}-${{ inputs.tag_label }}"
+          fi
+
+          git tag -a "$tag" -m "Deployed ${{ inputs.ref }} (run ${{ github.run_id }})"
+          git push origin "$tag"
+          echo "Tagged this deploy as $tag"
