@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Home, BarChart3, CreditCard, User, Sparkles } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { ShowcasePanel } from "@/data/content-en";
 
@@ -44,9 +45,43 @@ function ScreenBody({ screen }: { screen: ShowcasePanel["screen"] }) {
         <>
           <div className="dv-badge-label">{screen.label}</div>
           <div className="dv-badge-description">{screen.description}</div>
+          <div className="dv-badge-icon" aria-hidden="true">
+            <Sparkles size={22} />
+          </div>
+          {screen.tags.map((tag) => (
+            <div key={tag} className="dv-row">
+              <span className="dv-dot" />
+              {tag}
+            </div>
+          ))}
         </>
       );
   }
+}
+
+/*
+ * Purely decorative chrome, identical across every panel — it exists so the
+ * screen reads as a real app surface even on panels whose own content is
+ * short, rather than leaving a slab of empty glass beneath a couple of lines
+ * of text. Not a claim about any actual app's navigation.
+ */
+function TabBar() {
+  return (
+    <div className="dv-tabbar" aria-hidden="true">
+      <span className="dv-tab dv-tab-active">
+        <Home size={14} />
+      </span>
+      <span className="dv-tab">
+        <BarChart3 size={14} />
+      </span>
+      <span className="dv-tab">
+        <CreditCard size={14} />
+      </span>
+      <span className="dv-tab">
+        <User size={14} />
+      </span>
+    </div>
+  );
 }
 
 function Screen({ panel, active }: { panel: ShowcasePanel; active: boolean }) {
@@ -113,6 +148,7 @@ export function DeviceShowcase() {
                       active={index === active}
                     />
                   ))}
+                  <TabBar />
                   <div className="dv-glare" aria-hidden="true" />
                 </div>
               </div>

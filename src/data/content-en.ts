@@ -8,7 +8,7 @@ import { yearsOfExperience } from "../utils/calculateExperience";
 export type ShowcaseScreen =
   | { kind: "story"; figure: string; caption: string; rows: string[] }
   | { kind: "stats"; stats: { value: string; label: string }[] }
-  | { kind: "badge"; label: string; description: string };
+  | { kind: "badge"; label: string; description: string; tags: string[] };
 
 export type ShowcasePanel = {
   eyebrow: string;
@@ -81,7 +81,7 @@ export const contentEN = {
       {
         eyebrow: "Leadership",
         title: `${yearsOfExperience} years building and leading`,
-        body: "From individual contributor to Global Lead Engineer, growing distributed teams that deliver enterprise banking solutions at scale.",
+        body: "From individual contributor to Global Lead Engineer, providing technical leadership, coaching, and mentorship to distributed teams that deliver enterprise banking solutions at scale.",
         screenLabel: "Path",
         screen: {
           kind: "story",
@@ -113,17 +113,7 @@ export const contentEN = {
           kind: "badge",
           label: "AI Champion",
           description: "Embedding AI agents across the full SDLC",
-        },
-      },
-      {
-        eyebrow: "Team Lead",
-        title: "Leading distributed engineering teams",
-        body: "Providing technical leadership, coaching, and mentorship to engineering teams — empowering them to excel.",
-        screenLabel: "Leadership",
-        screen: {
-          kind: "badge",
-          label: "Team Lead",
-          description: "Empowering engineering teams to excel",
+          tags: ["AI Coding Agents", "Prompt Engineering", "Agentic Workflows"],
         },
       },
     ] as ShowcasePanel[],

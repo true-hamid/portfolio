@@ -61,7 +61,7 @@ export const contentAR: ContentType = {
       {
         eyebrow: "القيادة",
         title: `${yearsOfExperience} سنين من البناء والقيادة`,
-        body: "من مهندس فردي إلى مهندس قائد عالمي، بتطوير فرق موزعة تقدم حلولاً مصرفية للمؤسسات على نطاق واسع.",
+        body: "من مهندس فردي إلى مهندس قائد عالمي، بتقديم القيادة التقنية والتوجيه والإرشاد لفرق موزعة تقدم حلولاً مصرفية للمؤسسات على نطاق واسع.",
         screenLabel: "المسار",
         screen: {
           kind: "story",
@@ -93,17 +93,7 @@ export const contentAR: ContentType = {
           kind: "badge",
           label: "رائد الذكاء الصناعي",
           description: "عجلة اسرع وافضل عن طريق الذكاء الصناعي",
-        },
-      },
-      {
-        eyebrow: "قائد فريق",
-        title: "قيادة فرق هندسية موزعة",
-        body: "تقديم القيادة التقنية والتوجيه والإرشاد للفرق الهندسية — تمكينها من التفوق.",
-        screenLabel: "القيادة",
-        screen: {
-          kind: "badge",
-          label: "قائد فريق",
-          description: "تمكين الفرق الهندسية للتفوق",
+          tags: ["AI Coding Agents", "Prompt Engineering", "Agentic Workflows"],
         },
       },
     ],
