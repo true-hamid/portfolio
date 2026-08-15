@@ -1,38 +1,30 @@
-name: Deploy to murabba.com
+name: Deploy to hosting server
 
+# Production ships only from a merged pull request. Direct pushes to main no
+# longer trigger this workflow at all, so a hotfix committed straight to the
+# branch cannot reach the host without review.
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# One deploy at a time, and never cancel one midway: a half-finished FTP
+# upload leaves the host serving a mix of old and new assets. Rollbacks share
+# this same group, so a rollback and a forward deploy can never race either.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-        env:
-          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
-          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
-          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
-          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
-
-      - name: Deploy over FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build/
-          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+    # `closed` fires for abandoned pull requests too — only merges deploy.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    uses: ./.github/workflows/deploy-core.yml
+    with:
+      ref: main
+    secrets: inherit
