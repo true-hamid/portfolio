@@ -1,0 +1,52 @@
+name: Rollback deployment
+
+# Re-deploys a previously tagged release. Every successful deploy — forward
+# or rollback — is tagged deploy-<run>-<sha>[-rollback] by deploy-core.yml,
+# so the repo's Tags page (or `git tag -l "deploy-*"`) is the full deploy
+# history to pick a target from.
+#
+# workflow_dispatch inputs can't be populated dynamically from git tags —
+# GitHub only supports static choice lists — so this takes the tag as free
+# text and validates it exists before doing anything.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Deploy tag to roll back to (e.g. deploy-42-a1b2c3d) — see the Tags page for the full list"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.check.outputs.ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - id: check
+        run: |
+          set -euo pipefail
+          if ! git rev-parse "refs/tags/${{ inputs.tag }}" >/dev/null 2>&1; then
+            echo "::error::Tag '${{ inputs.tag }}' does not exist. Check the Tags page for valid deploy tags."
+            exit 1
+          fi
+          echo "ref=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+
+  rollback:
+    needs: validate
+    uses: ./.github/workflows/deploy-core.yml
+    with:
+      ref: ${{ needs.validate.outputs.ref }}
+      tag_label: rollback
+    secrets: inherit
