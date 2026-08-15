@@ -1,17 +1,21 @@
 import { yearsOfExperience } from "../utils/calculateExperience";
 
 /**
- * A single counted figure in the metrics strip. `value` is the number the
- * counter animates toward; everything else controls how it is rendered.
+ * What renders on the phone screen for a given panel. Deliberately limited to
+ * a headline figure/short list, or a small set of standalone stats — narrative
+ * framing only, nothing that characterizes how any product is actually built.
  */
-export type Metric = {
-  value: number;
-  /** Fixed decimal places. Omitted means a whole number. */
-  decimals?: number;
-  /** Render via Intl compact notation — 1000000 becomes "1M". */
-  compact?: boolean;
-  suffix?: string;
-  label: string;
+export type ShowcaseScreen =
+  | { kind: "story"; figure: string; caption: string; rows: string[] }
+  | { kind: "stats"; stats: { value: string; label: string }[] }
+  | { kind: "badge"; label: string; description: string; tags: string[] };
+
+export type ShowcasePanel = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  screenLabel: string;
+  screen: ShowcaseScreen;
 };
 
 export const contentEN = {
@@ -60,56 +64,65 @@ export const contentEN = {
     },
   },
 
-  metrics: {
-    title: "Impact at a glance",
-    items: [
+  showcase: {
+    panels: [
       {
-        value: 1000000,
-        compact: true,
-        suffix: "+",
-        label: "Users on products I've helped ship",
+        eyebrow: "Scale",
+        title: "One product, multiple geographies",
+        body: "I lead engineering for enterprise banking solutions used by more than a million customers across the UAE, Egypt and Pakistan.",
+        screenLabel: "Reach",
+        screen: {
+          kind: "story",
+          figure: "1M+",
+          caption: "Customers across three regions",
+          rows: ["United Arab Emirates", "Egypt", "Pakistan"],
+        },
       },
       {
-        value: 90,
-        suffix: "%",
-        label: "Reduction in app vulnerabilities",
+        eyebrow: "Leadership",
+        title: `${yearsOfExperience} years building and leading`,
+        body: "From individual contributor to Global Lead Engineer, providing technical leadership, coaching, and mentorship to distributed teams that deliver enterprise banking solutions at scale.",
+        screenLabel: "Path",
+        screen: {
+          kind: "story",
+          figure: `${yearsOfExperience}`,
+          caption: "Years in enterprise banking engineering",
+          rows: ["Dev Engineer", "Senior Dev Engineer", "Global Lead Engineer"],
+        },
       },
       {
-        value: 3,
-        suffix: "×",
-        label: "Faster app launch time",
+        eyebrow: "Impact",
+        title: "Proof in the numbers",
+        body: "Fewer vulnerabilities, faster launches, and consistently strong ratings from the people using what I've helped ship.",
+        screenLabel: "Impact",
+        screen: {
+          kind: "stats",
+          stats: [
+            { value: "90%", label: "Reduction in app vulnerabilities" },
+            { value: "3×", label: "Faster app launch time" },
+            { value: "4.8★", label: "Average app store rating" },
+          ],
+        },
       },
       {
-        value: 4.8,
-        decimals: 1,
-        suffix: "★",
-        label: "Average app store rating",
+        eyebrow: "AI Champion",
+        title: "Championing AI-driven development",
+        body: "Embedding AI coding agents and AI-augmented practices across the full software development lifecycle to accelerate delivery and elevate code quality.",
+        screenLabel: "Practice",
+        screen: {
+          kind: "badge",
+          label: "AI Champion",
+          description: "Embedding AI agents across the full SDLC",
+          tags: ["AI Coding Agents", "Prompt Engineering", "Agentic Workflows"],
+        },
       },
-    ] as Metric[],
+    ] as ShowcasePanel[],
   },
 
   about: {
     title: "About Me",
     subtitle:
       `Lead Engineer with ${yearsOfExperience} years of experience designing and delivering enterprise-scale digital banking solutions across the UAE, Egypt, and Pakistan. Specialized in mobile engineering, secure digital channels, and multi-region product delivery. Trusted technical leader with a strong record of improving app performance, driving security maturity, and accelerating engineering productivity. Champion of AI-driven development, embedding AI coding agents and AI-augmented practices across the software development lifecycle (SDLC) to accelerate delivery and elevate code quality.`,
-    highlights: [
-      {
-        title: `${yearsOfExperience} Years`,
-        description: "Building & scaling engineering solutions",
-      },
-      {
-        title: "AI Champion",
-        description: "Embedding AI agents across the full SDLC",
-      },
-      {
-        title: "Team Lead",
-        description: "Empowering engineering teams to excel",
-      },
-      {
-        title: "1M+ Users",
-        description: "Using products I helped deliver",
-      },
-    ],
     journey: {
       title: "My Journey",
       paragraphs: [

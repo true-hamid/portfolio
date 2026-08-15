@@ -1,5 +1,4 @@
 import { Hero } from "@/components/Hero";
-import { Metrics } from "@/components/Metrics";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
@@ -15,7 +14,6 @@ export default function App() {
         through a single space rather than alternating light and dark panels.
       */}
       <div className="im-stage">
-        <Metrics />
         <About />
         <Skills />
         <Experience />

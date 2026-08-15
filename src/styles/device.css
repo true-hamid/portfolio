@@ -1,0 +1,501 @@
+/*
+ * The Device — a phone built from CSS 3D transforms, held in place while the
+ * story scrolls past it.
+ *
+ * Written entirely in plain CSS, no utility classes. src/index.css is a frozen,
+ * pre-compiled Tailwind build, so any class the original markup did not already
+ * use simply does not exist. Nothing here depends on that build.
+ *
+ * The screen holds live DOM rather than a texture or an image, so the interface
+ * inside the phone stays sharp at any resolution and is readable by assistive
+ * tech like ordinary content.
+ */
+
+/* ── Layout ────────────────────────────────────────────────────────────── */
+
+/* position:relative — needed as the sticky phone's containing context; the
+   parent About section's py-24 owns vertical spacing now. */
+.dv-showcase {
+  position: relative;
+}
+
+.dv-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding-inline: 1rem;
+}
+
+/*
+ * Two columns at every width, not just desktop — that's the point. A single
+ * shared column can't have both an always-visible opaque phone and
+ * always-readable text without one covering the other: sticky positioning
+ * stays stuck for as long as its containing block is in view, so a phone
+ * stacked above the panel list either pins on top of the text scrolling
+ * underneath it (unreadable) or has to stop being sticky (invisible for
+ * every panel after the first). Giving it its own narrow lane sidesteps the
+ * problem entirely instead of trading one failure mode for the other — the
+ * phone just shrinks, it doesn't change behaviour.
+ */
+.dv-inner {
+  display: grid;
+  grid-template-columns: minmax(96px, 30vw) 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+/*
+ * The grid gives the phone its own lane, so sticky means "stays in its lane
+ * while the other lane scrolls past beside it," not "on top of the text."
+ * align-self:start keeps it from stretching to the row's full height, which
+ * would leave it nowhere to travel.
+ */
+/*
+ * Sized to its content, not the viewport: sticky's own release point is
+ * "container height minus sticky element's own height" — an artificially
+ * tall sticky box (100vh) eats into that budget for no reason once the
+ * phone inside it is this small, releasing well before the last panel has
+ * had its turn. Auto height keeps the release point tracking the actual
+ * panel stack instead of a fixed height that has nothing to do with it.
+ */
+.dv-sticky {
+  position: sticky;
+  top: 1.5rem;
+  align-self: start;
+  height: auto;
+  padding-block: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.dv-panel {
+  min-height: 54vh;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .dv-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .dv-sticky {
+    top: 0;
+    height: 100vh;
+    padding-block: 0;
+  }
+
+  .dv-panel {
+    min-height: 100vh;
+  }
+}
+
+/* ── Story panels ──────────────────────────────────────────────────────── */
+
+.dv-panel-inner {
+  padding-block: 1.25rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* The inactive panels stay legible — dimmed, never hidden. */
+.dv-panel[data-active="false"] .dv-panel-inner {
+  opacity: 0.35;
+}
+
+.dv-panel-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  color: var(--im-accent);
+  margin-bottom: 0.75rem;
+}
+
+.dv-panel h3 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  color: var(--im-heading);
+}
+
+.dv-panel p {
+  font-size: 0.9375rem;
+  color: var(--im-body);
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .dv-panel-inner {
+    padding-block: 2rem;
+  }
+
+  .dv-panel h3 {
+    font-size: clamp(1.5rem, 3vw, 2.125rem);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .dv-panel p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+/* ── The device ────────────────────────────────────────────────────────── */
+
+.dv-stage {
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+}
+
+.dv-phone {
+  --dv-turn: -14deg;
+  --dv-tilt: 3deg;
+
+  position: relative;
+  /*
+   * width:100% doesn't work here — .dv-stage and .dv-float (its ancestors)
+   * have no explicit width of their own, so there's no definite containing
+   * block for a percentage to resolve against, and it collapses instead of
+   * filling the grid column. Mirroring the column's own minmax(96px, 30vw)
+   * formula directly sidesteps that: no containing-block dependency, and it
+   * still tracks the same lane width the grid track actually computes.
+   */
+  width: clamp(96px, 30vw, 160px);
+  aspect-ratio: 9 / 19.5;
+  border-radius: 16px;
+  padding: clamp(6px, 0.8vw, 10px);
+  transform-style: preserve-3d;
+  transform: rotateY(var(--dv-turn)) rotateX(var(--dv-tilt));
+  transition: transform 0.9s cubic-bezier(0.22, 0.85, 0.3, 1);
+
+  /* Brushed rail: a light edge catching the aurora, a dark one falling away. */
+  background: linear-gradient(145deg, #6b7a93 0%, #2b3446 28%, #1b2231 60%, #4a5568 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 30px 70px -20px rgba(0, 0, 0, 0.75),
+    0 8px 24px -8px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 768px) {
+  .dv-phone {
+    width: clamp(190px, 26vw, 290px);
+    border-radius: clamp(28px, 3.4vw, 42px);
+  }
+}
+
+/*
+ * A separate wrapper, one level out from .dv-phone. Both elements set the
+ * `transform` property — the phone's own rotateY/rotateX turn, and the
+ * wrapper's float — and a single element can only ever have one live
+ * `transform`, animated or not. Splitting them across parent and child is
+ * what lets both apply at once. preserve-3d carries the stage's perspective
+ * through the wrapper to the phone inside it.
+ */
+.dv-float {
+  transform-style: preserve-3d;
+  animation: dv-float 7s ease-in-out infinite;
+}
+
+@keyframes dv-float {
+  0%, 100% { transform: translateY(-6px); }
+  50%      { transform: translateY(6px); }
+}
+
+.dv-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: clamp(22px, 2.7vw, 33px);
+  overflow: hidden;
+  background: radial-gradient(120% 80% at 50% 0%, #131c33 0%, #070b16 70%);
+}
+
+/* Dynamic island. */
+.dv-island {
+  position: absolute;
+  top: 2.2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 3.2%;
+  min-height: 12px;
+  border-radius: 999px;
+  background: #05070e;
+  z-index: 4;
+}
+
+/* A fixed sheen across the glass; sits above the UI, catches nothing else. */
+.dv-glare {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.04) 22%,
+    transparent 46%
+  );
+}
+
+/* ── Screens ───────────────────────────────────────────────────────────── */
+
+.dv-app {
+  position: absolute;
+  inset: 0;
+  padding: 13% 8% 8%;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+  pointer-events: none;
+}
+
+.dv-app[data-active="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.dv-app-label {
+  font-size: 0.4375rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #64789d;
+  margin-bottom: 0.35rem;
+}
+
+.dv-app-figure {
+  font-size: 1.125rem;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.1rem;
+
+  /* Same bidi guard as the metrics strip: trailing +, x and star are neutral. */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.dv-app-sub {
+  font-size: 0.4375rem;
+  color: #7d8fb3;
+  margin-bottom: 0.6rem;
+}
+
+.dv-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.4rem;
+  margin-bottom: 0.2rem;
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 0.4375rem;
+  color: #c2cfe4;
+}
+
+.dv-dot {
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: #4f9dff;
+  flex: none;
+}
+
+/* A handful of standalone figures, stacked — distinct from the single-figure
+   .dv-app-figure treatment above, since there's no one headline number here. */
+.dv-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.dv-stat {
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.dv-stat-value {
+  font-size: 0.8125rem;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+
+  /* Same bidi guard as .dv-app-figure: trailing %, × and ★ are neutral. */
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.dv-stat-label {
+  font-size: 0.4375rem;
+  color: #7d8fb3;
+  margin-top: 0.1rem;
+}
+
+/* A single qualitative label + description — no bidi guard, unlike the
+   figures above: this is a translated phrase, not a number with a trailing
+   symbol, so there's no neutral character for RTL to reorder. */
+.dv-badge-label {
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.3rem;
+}
+
+.dv-badge-description {
+  font-size: 0.4375rem;
+  color: #7d8fb3;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+}
+
+.dv-badge-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: rgba(124, 178, 255, 0.14);
+  color: #7cb2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.6rem;
+}
+
+@media (min-width: 768px) {
+  .dv-app-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.5rem;
+  }
+
+  .dv-app-figure {
+    font-size: 1.75rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .dv-app-sub {
+    font-size: 0.5625rem;
+    margin-bottom: 1rem;
+  }
+
+  .dv-row {
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    margin-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    font-size: 0.5625rem;
+  }
+
+  .dv-dot {
+    width: 0.3rem;
+    height: 0.3rem;
+  }
+
+  .dv-stats {
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+
+  .dv-stat {
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.6rem;
+  }
+
+  .dv-stat-value {
+    font-size: 1.125rem;
+  }
+
+  .dv-stat-label {
+    font-size: 0.5625rem;
+  }
+
+  .dv-badge-label {
+    font-size: 1.375rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .dv-badge-description {
+    font-size: 0.625rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .dv-badge-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 0.85rem;
+  }
+}
+
+/*
+ * Fixed chrome, not part of any one screen's content — sits below the
+ * per-panel .dv-app layers (which have no z-index of their own and paint in
+ * DOM order) but above the phone's background, and under the glare.
+ */
+.dv-tabbar {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: 6%;
+  z-index: 2;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dv-tab {
+  display: flex;
+  color: #4a5a78;
+}
+
+.dv-tab-active {
+  color: #7cb2ff;
+}
+
+@media (min-width: 768px) {
+  .dv-tabbar {
+    padding: 0.55rem 0.5rem;
+  }
+}
+
+/* ── Adaptations ───────────────────────────────────────────────────────── */
+
+/*
+ * A phone rendered inside a phone reads as an illustration, so it lies flat.
+ * --dv-turn is also set as an inline style (it tracks the active panel), and
+ * inline declarations beat a stylesheet rule of equal importance regardless
+ * of specificity — without !important this override would be silently lost
+ * on every viewport under 768px.
+ */
+@media (max-width: 767px) {
+  .dv-phone {
+    --dv-turn: 0deg !important;
+    --dv-tilt: 0deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dv-phone,
+  .dv-app,
+  .dv-panel-inner {
+    transition: none;
+  }
+
+  .dv-float {
+    animation: none;
+  }
+
+  /* Dimming inactive panels is a motion effect too — drop it entirely. */
+  .dv-panel[data-active="false"] .dv-panel-inner {
+    opacity: 1;
+  }
+}

@@ -167,69 +167,6 @@ body {
   border-top: 1px solid var(--im-line);
 }
 
-/* ── Metrics ───────────────────────────────────────────────────────────── */
-
-/*
- * Laid out in plain CSS rather than grid utilities. The compiled build only
- * contains the classes the original markup happened to use, so `grid-cols-2`,
- * `gap-10` and friends do not exist and would fail silently here.
- */
-.im-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2.5rem 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .im-metrics-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-.im-eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  font-size: 0.8125rem;
-  color: var(--im-muted);
-  margin-bottom: 3rem;
-}
-
-.im-metric-value {
-  font-size: clamp(2.25rem, 5vw, 3rem);
-  line-height: 1.1;
-  margin-bottom: 0.5rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  background-image: linear-gradient(180deg, #ffffff 0%, #9dc4ff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-
-  /*
-   * "1M+", "3×" and "4.8★" end in characters with neutral bidi class. Under
-   * dir="rtl" those get reordered to the head of the run and the figure reads
-   * "+1M". Pinning the run to LTR keeps every numeral intact in both locales.
-   */
-  direction: ltr;
-  unicode-bidi: isolate;
-}
-
-.im-metric-label {
-  color: var(--im-muted);
-}
-
-.im-sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
 /* ── Scroll-driven reveals ─────────────────────────────────────────────── */
 
 /*
